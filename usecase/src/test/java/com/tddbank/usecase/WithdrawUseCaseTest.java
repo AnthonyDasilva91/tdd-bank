@@ -2,6 +2,7 @@ package com.tddbank.usecase;
 
 import com.tddbank.domain.entity.Account;
 import com.tddbank.domain.exception.AccountNotFoundException;
+import com.tddbank.domain.exception.NotEnoughMoneyException;
 import com.tddbank.domain.exception.NotValidAmountException;
 import com.tddbank.usecase.account.CreateAccountUseCase;
 import com.tddbank.usecase.account.GetAccountUseCase;

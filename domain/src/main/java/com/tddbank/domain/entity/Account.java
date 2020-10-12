@@ -1,5 +1,6 @@
 package com.tddbank.domain.entity;
 
+import com.tddbank.domain.exception.NotEnoughMoneyException;
 import com.tddbank.domain.exception.NotValidAmountException;
 
 import java.util.UUID;
@@ -35,6 +36,10 @@ public class Account {
 
         if (amount <= 0) {
             throw new NotValidAmountException("Amount cannot be negative or zero !");
+        }
+
+        if (amount > this.amount) {
+            throw new NotEnoughMoneyException("Not enough money for the withdrawal");
         }
 
         this.amount -= amount;
