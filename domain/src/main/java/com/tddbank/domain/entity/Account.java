@@ -33,8 +33,8 @@ public class Account {
 
     public void withdraw(double amount) {
 
-        if (amount == 0) {
-            throw new NotValidAmountException("Amount cannot be zero !");
+        if (amount <= 0) {
+            throw new NotValidAmountException("Amount cannot be negative or zero !");
         }
     }
 }
