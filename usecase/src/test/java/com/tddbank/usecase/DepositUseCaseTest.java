@@ -5,6 +5,7 @@ import com.tddbank.domain.exception.AccountNotFoundException;
 import com.tddbank.domain.exception.NotValidAmountException;
 import com.tddbank.usecase.account.CreateAccountUseCase;
 import com.tddbank.usecase.account.GetAccountUseCase;
+import com.tddbank.usecase.money.DepositUseCase;
 import com.tddbank.usecase.port.AccountRepository;
 import com.tddbank.usecase.port.AccountRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;

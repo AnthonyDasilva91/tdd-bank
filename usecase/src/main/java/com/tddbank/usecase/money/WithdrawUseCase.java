@@ -1,4 +1,4 @@
-package com.tddbank.usecase;
+package com.tddbank.usecase.money;
 
 import com.tddbank.domain.entity.Account;
 import com.tddbank.domain.exception.AccountNotFoundException;

@@ -1,8 +1,7 @@
-package com.tddbank.usecase;
+package com.tddbank.usecase.money;
 
 import com.tddbank.domain.entity.Account;
 import com.tddbank.domain.exception.AccountNotFoundException;
-import com.tddbank.domain.exception.NotValidAmountException;
 import com.tddbank.usecase.port.AccountRepository;
 
 import java.util.UUID;
