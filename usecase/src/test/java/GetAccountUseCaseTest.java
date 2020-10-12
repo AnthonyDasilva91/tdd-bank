@@ -12,6 +12,6 @@ public class GetAccountUseCaseTest {
         GetAccountUseCase getAccountUseCase = new GetAccountUseCase();
 
         // Act & Assert
-        Assertions.assertThrows(AccountNotFoundException.class, getAccountUseCase.get(notExistingAccountId));
+        Assertions.assertThrows(AccountNotFoundException.class, () -> getAccountUseCase.get(notExistingAccountId));
     }
 }
