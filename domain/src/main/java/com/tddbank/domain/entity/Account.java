@@ -19,4 +19,8 @@ public class Account {
     public double getAmount() {
         return this.amount;
     }
+
+    public void deposit(double amount) {
+        this.amount += amount;
+    }
 }

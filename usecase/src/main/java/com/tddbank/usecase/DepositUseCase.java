@@ -17,11 +17,14 @@ public class DepositUseCase {
 
     public void deposit(UUID accountId, double amount) {
 
-        accountRepository.findById(accountId)
+        Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found !"));
 
         if (amount <= 0) {
             throw new NotValidAmountException("Amount cannot be zero !");
         }
+
+        account.deposit(amount);
+        accountRepository.save(account);
     }
 }
