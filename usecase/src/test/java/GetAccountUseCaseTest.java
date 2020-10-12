@@ -1,8 +1,10 @@
 import exception.AccountNotFoundException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GetAccountUseCaseTest {
 
@@ -13,6 +15,20 @@ public class GetAccountUseCaseTest {
         GetAccountUseCase getAccountUseCase = new GetAccountUseCase();
 
         // Act & Assert
-        Assertions.assertThrows(AccountNotFoundException.class, () -> getAccountUseCase.get(notExistingAccountId));
+        assertThrows(AccountNotFoundException.class, () -> getAccountUseCase.get(notExistingAccountId));
+    }
+
+    @Test
+    void should_return_account_when_account_exists() {
+        // Arrange
+        GetAccountUseCase getAccountUseCase = new GetAccountUseCase();
+        CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase();
+        Account createdAccount = createAccountUseCase.create();
+
+        // Act
+        Account existingAccount = getAccountUseCase.get(createdAccount.getId());
+
+        // Assert
+        assertEquals(createdAccount, existingAccount);
     }
 }
