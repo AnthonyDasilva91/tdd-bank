@@ -7,7 +7,6 @@ import com.tddbank.usecase.account.CreateAccountUseCase;
 import com.tddbank.usecase.account.GetAccountUseCase;
 import com.tddbank.usecase.port.AccountRepository;
 import com.tddbank.usecase.port.AccountRepositoryImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class WithdrawUseCaseTest {
@@ -37,7 +39,7 @@ public class WithdrawUseCaseTest {
         WithdrawUseCase withdrawUseCase = new WithdrawUseCase(mockAccountRepository);
 
         // Act & Assert
-        Assertions.assertThrows(NotValidAmountException.class, () -> withdrawUseCase.withdraw(existingAccountId, 0));
+        assertThrows(NotValidAmountException.class, () -> withdrawUseCase.withdraw(existingAccountId, 0));
     }
 
     @Test
@@ -50,7 +52,7 @@ public class WithdrawUseCaseTest {
         WithdrawUseCase withdrawUseCase = new WithdrawUseCase(mockAccountRepository);
 
         // Act & Assert
-        Assertions.assertThrows(NotValidAmountException.class, () -> withdrawUseCase.withdraw(existingAccountId, -1));
+        assertThrows(NotValidAmountException.class, () -> withdrawUseCase.withdraw(existingAccountId, -1));
     }
 
     @Test
@@ -63,7 +65,22 @@ public class WithdrawUseCaseTest {
         WithdrawUseCase withdrawUseCase = new WithdrawUseCase(mockAccountRepository);
 
         // Act & Assert
-        Assertions.assertThrows(AccountNotFoundException.class, () -> withdrawUseCase.withdraw(existingAccountId, -1));
+        assertThrows(AccountNotFoundException.class, () -> withdrawUseCase.withdraw(existingAccountId, -1));
+    }
+
+    @Test
+    void should_throw_exception_when_not_enough_money_on_account() {
+
+        // Arrange
+        AccountRepository accountRepository = new AccountRepositoryImpl();
+
+        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(accountRepository);
+        CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase(accountRepository);
+
+        Account existingAccount = createAccountUseCase.create();
+
+        // Act & Assert
+        assertThrows(NotEnoughMoneyException.class, () -> withdrawUseCase.withdraw(existingAccount.getId(), 10));
     }
 
     @Test
@@ -86,6 +103,6 @@ public class WithdrawUseCaseTest {
 
         // Assert
         Account accountWithDeposit = getAccountUseCase.get(existingAccount.getId());
-        Assertions.assertEquals(expected, accountWithDeposit.getAmount());
+        assertEquals(expected, accountWithDeposit.getAmount());
     }
 }
