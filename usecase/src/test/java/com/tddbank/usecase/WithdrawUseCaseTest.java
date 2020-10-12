@@ -1,6 +1,7 @@
 package com.tddbank.usecase;
 
 import com.tddbank.domain.entity.Account;
+import com.tddbank.domain.exception.AccountNotFoundException;
 import com.tddbank.domain.exception.NotValidAmountException;
 import com.tddbank.usecase.port.AccountRepository;
 import org.junit.jupiter.api.Assertions;
@@ -47,5 +48,18 @@ public class WithdrawUseCaseTest {
 
         // Act & Assert
         Assertions.assertThrows(NotValidAmountException.class, () -> withdrawUseCase.withdraw(existingAccountId, -1));
+    }
+
+    @Test
+    void should_throw_exception_when_account_does_not_exists() {
+
+        // Arrange
+        UUID existingAccountId = UUID.randomUUID();
+        Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.of(new Account()));
+
+        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(mockAccountRepository);
+
+        // Act & Assert
+        Assertions.assertThrows(AccountNotFoundException.class, () -> withdrawUseCase.withdraw(existingAccountId, -1));
     }
 }
