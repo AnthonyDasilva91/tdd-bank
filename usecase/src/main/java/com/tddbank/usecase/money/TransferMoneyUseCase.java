@@ -18,5 +18,8 @@ public class TransferMoneyUseCase {
 
         Account payer = accountRepository.findById(payerAccountId)
                 .orElseThrow(() -> new AccountNotFoundException("Payer account not found !"));
+
+        Account payee = accountRepository.findById(payeeAccountId)
+                .orElseThrow(() -> new AccountNotFoundException("Payee account not found !"));
     }
 }
