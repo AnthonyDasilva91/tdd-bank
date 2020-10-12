@@ -1,4 +1,5 @@
 import exception.AccountNotFoundException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -8,11 +9,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GetAccountUseCaseTest {
 
+    private static CreateAccountUseCase createAccountUseCase;
+    private static GetAccountUseCase getAccountUseCase;
+
+    @BeforeAll
+    static void setUp() {
+        AccountRepository accountRepository = new AccountRepository();
+        createAccountUseCase = new CreateAccountUseCase(accountRepository);
+        getAccountUseCase = new GetAccountUseCase(accountRepository);
+    }
+
     @Test
     void should_throw_exception_when_not_existing_account() {
         // Arrange
         UUID notExistingAccountId = UUID.randomUUID();
-        GetAccountUseCase getAccountUseCase = new GetAccountUseCase();
 
         // Act & Assert
         assertThrows(AccountNotFoundException.class, () -> getAccountUseCase.get(notExistingAccountId));
@@ -21,8 +31,6 @@ public class GetAccountUseCaseTest {
     @Test
     void should_return_account_when_account_exists() {
         // Arrange
-        GetAccountUseCase getAccountUseCase = new GetAccountUseCase();
-        CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase();
         Account createdAccount = createAccountUseCase.create();
 
         // Act
