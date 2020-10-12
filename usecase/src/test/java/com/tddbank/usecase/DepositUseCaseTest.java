@@ -20,19 +20,21 @@ import java.util.UUID;
 @ExtendWith(MockitoExtension.class)
 public class DepositUseCaseTest {
 
-    private AccountRepository accountRepository;
+    private AccountRepository mockAccountRepository;
 
     @BeforeEach
     void mock() {
-        accountRepository = Mockito.mock(AccountRepository.class);
+        mockAccountRepository = Mockito.mock(AccountRepository.class);
     }
 
     @Test
     void should_throw_exception_when_deposit_is_zero() {
+
         // Arrange
         UUID existingAccountId = UUID.randomUUID();
-        Mockito.when(accountRepository.findById(existingAccountId)).thenReturn(Optional.of(new Account()));
-        DepositUseCase depositUseCase = new DepositUseCase(accountRepository);
+        Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.of(new Account()));
+
+        DepositUseCase depositUseCase = new DepositUseCase(mockAccountRepository);
 
         // Act & Assert
         Assertions.assertThrows(NotValidAmountException.class, () -> depositUseCase.deposit(existingAccountId, 0));
@@ -40,10 +42,12 @@ public class DepositUseCaseTest {
 
     @Test
     void should_throw_exception_when_deposit_is_negative() {
+
         // Arrange
         UUID existingAccountId = UUID.randomUUID();
-        Mockito.when(accountRepository.findById(existingAccountId)).thenReturn(Optional.of(new Account()));
-        DepositUseCase depositUseCase = new DepositUseCase(accountRepository);
+        Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.of(new Account()));
+
+        DepositUseCase depositUseCase = new DepositUseCase(mockAccountRepository);
 
         // Act & Assert
         Assertions.assertThrows(NotValidAmountException.class, () -> depositUseCase.deposit(existingAccountId, -1));
@@ -51,10 +55,12 @@ public class DepositUseCaseTest {
 
     @Test
     void should_throw_exception_when_account_does_not_exists() {
+
         // Arrange
         UUID existingAccountId = UUID.randomUUID();
-        Mockito.when(accountRepository.findById(existingAccountId)).thenReturn(Optional.empty());
-        DepositUseCase depositUseCase = new DepositUseCase(accountRepository);
+        Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.empty());
+
+        DepositUseCase depositUseCase = new DepositUseCase(mockAccountRepository);
 
         // Act & Assert
         Assertions.assertThrows(AccountNotFoundException.class, () -> depositUseCase.deposit(existingAccountId, -1));
@@ -62,8 +68,10 @@ public class DepositUseCaseTest {
 
     @Test
     void should_amount_be_10_when_deposit_is_10() {
+
         // Arrange
         AccountRepository accountRepository = new AccountRepositoryImpl();
+
         DepositUseCase depositUseCase = new DepositUseCase(accountRepository);
         CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase(accountRepository);
         GetAccountUseCase getAccountUseCase = new GetAccountUseCase(accountRepository);

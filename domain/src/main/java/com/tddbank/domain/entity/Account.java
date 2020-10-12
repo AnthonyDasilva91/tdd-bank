@@ -1,5 +1,7 @@
 package com.tddbank.domain.entity;
 
+import com.tddbank.domain.exception.NotValidAmountException;
+
 import java.util.UUID;
 
 public class Account {
@@ -21,6 +23,11 @@ public class Account {
     }
 
     public void deposit(double amount) {
+
+        if (amount <= 0) {
+            throw new NotValidAmountException("Amount cannot be zero !");
+        }
+
         this.amount += amount;
     }
 }
