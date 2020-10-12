@@ -21,5 +21,11 @@ public class TransferMoneyUseCase {
 
         Account payee = accountRepository.findById(payeeAccountId)
                 .orElseThrow(() -> new AccountNotFoundException("Payee account not found !"));
+
+        payer.withdraw(amount);
+        payee.deposit(amount);
+
+        accountRepository.save(payer);
+        accountRepository.save(payee);
     }
 }
