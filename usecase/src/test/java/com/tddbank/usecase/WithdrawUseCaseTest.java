@@ -55,7 +55,7 @@ public class WithdrawUseCaseTest {
 
         // Arrange
         UUID existingAccountId = UUID.randomUUID();
-        Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.of(new Account()));
+        Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.empty());
 
         WithdrawUseCase withdrawUseCase = new WithdrawUseCase(mockAccountRepository);
 
