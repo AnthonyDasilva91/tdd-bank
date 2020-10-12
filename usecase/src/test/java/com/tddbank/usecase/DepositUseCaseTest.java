@@ -33,4 +33,15 @@ public class DepositUseCaseTest {
         // Act & Assert
         Assertions.assertThrows(NotValidAmountException.class, () -> depositUseCase.deposit(existingAccountId, 0));
     }
+
+    @Test
+    void should_throw_exception_when_deposit_is_negative() {
+        // Arrange
+        UUID existingAccountId = UUID.randomUUID();
+        Mockito.when(accountRepository.findById(existingAccountId)).thenReturn(Optional.of(new Account()));
+        DepositUseCase depositUseCase = new DepositUseCase(accountRepository);
+
+        // Act & Assert
+        Assertions.assertThrows(NotValidAmountException.class, () -> depositUseCase.deposit(existingAccountId, -1));
+    }
 }
