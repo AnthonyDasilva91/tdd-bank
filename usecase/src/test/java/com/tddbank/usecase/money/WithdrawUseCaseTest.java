@@ -1,13 +1,10 @@
-package com.tddbank.usecase;
+package com.tddbank.usecase.money;
 
 import com.tddbank.domain.entity.Account;
 import com.tddbank.domain.exception.AccountNotFoundException;
 import com.tddbank.domain.exception.NotEnoughMoneyException;
 import com.tddbank.domain.exception.NotValidAmountException;
 import com.tddbank.usecase.account.CreateAccountUseCase;
-import com.tddbank.usecase.account.GetAccountUseCase;
-import com.tddbank.usecase.money.DepositUseCase;
-import com.tddbank.usecase.money.WithdrawUseCase;
 import com.tddbank.usecase.port.AccountRepository;
 import com.tddbank.usecase.port.AccountRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class WithdrawUseCaseTest {
@@ -91,21 +87,20 @@ public class WithdrawUseCaseTest {
 
         // Arrange
         AccountRepository accountRepository = new AccountRepositoryImpl();
-
-        DepositUseCase depositUseCase = new DepositUseCase(accountRepository);
         WithdrawUseCase withdrawUseCase = new WithdrawUseCase(accountRepository);
-        CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase(accountRepository);
-        GetAccountUseCase getAccountUseCase = new GetAccountUseCase(accountRepository);
+
+        Account existingAccount = new Account();
+        existingAccount.deposit(100);
+        accountRepository.save(existingAccount);
 
         double expected = 90;
-        Account existingAccount = createAccountUseCase.create();
 
         // Act
-        depositUseCase.deposit(existingAccount.getId(), 100);
         withdrawUseCase.withdraw(existingAccount.getId(), 10);
 
         // Assert
-        Account accountWithDeposit = getAccountUseCase.get(existingAccount.getId());
-        assertEquals(expected, accountWithDeposit.getAmount());
+        Optional<Account> optionalAccount = accountRepository.findById(existingAccount.getId());
+        assertTrue(optionalAccount.isPresent());
+        assertEquals(expected, optionalAccount.get().getAmount());
     }
 }

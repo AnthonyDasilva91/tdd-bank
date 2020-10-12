@@ -1,11 +1,8 @@
-package com.tddbank.usecase;
+package com.tddbank.usecase.money;
 
 import com.tddbank.domain.entity.Account;
 import com.tddbank.domain.exception.AccountNotFoundException;
 import com.tddbank.domain.exception.NotValidAmountException;
-import com.tddbank.usecase.account.CreateAccountUseCase;
-import com.tddbank.usecase.account.GetAccountUseCase;
-import com.tddbank.usecase.money.DepositUseCase;
 import com.tddbank.usecase.port.AccountRepository;
 import com.tddbank.usecase.port.AccountRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class DepositUseCaseTest {
@@ -74,19 +70,18 @@ public class DepositUseCaseTest {
 
         // Arrange
         AccountRepository accountRepository = new AccountRepositoryImpl();
-
         DepositUseCase depositUseCase = new DepositUseCase(accountRepository);
-        CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase(accountRepository);
-        GetAccountUseCase getAccountUseCase = new GetAccountUseCase(accountRepository);
 
         double expected = 10;
-        Account existingAccount = createAccountUseCase.create();
+        Account existingAccount = new Account();
+        accountRepository.save(existingAccount);
 
         // Act
         depositUseCase.deposit(existingAccount.getId(), 10);
 
         // Assert
-        Account accountWithDeposit = getAccountUseCase.get(existingAccount.getId());
-        assertEquals(expected, accountWithDeposit.getAmount());
+        Optional<Account> optionalAccount = accountRepository.findById(existingAccount.getId());
+        assertTrue(optionalAccount.isPresent());
+        assertEquals(expected, optionalAccount.get().getAmount());
     }
 }
