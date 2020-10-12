@@ -67,7 +67,7 @@ public class DepositUseCaseTest {
     }
 
     @Test
-    void should_amount_be_10_when_deposit_is_10() {
+    void amount_should_be_10_when_deposit_is_10() {
 
         // Arrange
         AccountRepository accountRepository = new AccountRepositoryImpl();

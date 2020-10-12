@@ -3,7 +3,10 @@ package com.tddbank.usecase;
 import com.tddbank.domain.entity.Account;
 import com.tddbank.domain.exception.AccountNotFoundException;
 import com.tddbank.domain.exception.NotValidAmountException;
+import com.tddbank.usecase.account.CreateAccountUseCase;
+import com.tddbank.usecase.account.GetAccountUseCase;
 import com.tddbank.usecase.port.AccountRepository;
+import com.tddbank.usecase.port.AccountRepositoryImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,5 +64,28 @@ public class WithdrawUseCaseTest {
 
         // Act & Assert
         Assertions.assertThrows(AccountNotFoundException.class, () -> withdrawUseCase.withdraw(existingAccountId, -1));
+    }
+
+    @Test
+    void amount_should_decrease_of_10_when_withdrawal_of_10() {
+
+        // Arrange
+        AccountRepository accountRepository = new AccountRepositoryImpl();
+
+        DepositUseCase depositUseCase = new DepositUseCase(accountRepository);
+        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(accountRepository);
+        CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase(accountRepository);
+        GetAccountUseCase getAccountUseCase = new GetAccountUseCase(accountRepository);
+
+        double expected = 90;
+        Account existingAccount = createAccountUseCase.create();
+
+        // Act
+        depositUseCase.deposit(existingAccount.getId(), 100);
+        withdrawUseCase.withdraw(existingAccount.getId(), 10);
+
+        // Assert
+        Account accountWithDeposit = getAccountUseCase.get(existingAccount.getId());
+        Assertions.assertEquals(expected, accountWithDeposit.getAmount());
     }
 }
