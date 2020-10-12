@@ -16,7 +16,7 @@ public class DepositUseCase {
     public void deposit(UUID accountId, double amount) {
 
         accountRepository.findById(accountId).ifPresent(account -> {
-            if (amount == 0) {
+            if (amount <= 0) {
                 throw new NotValidAmountException("Amount cannot be zero !");
             }
         });
