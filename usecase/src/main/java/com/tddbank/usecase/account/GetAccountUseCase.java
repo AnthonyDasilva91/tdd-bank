@@ -21,11 +21,7 @@ public class GetAccountUseCase {
      */
     public Account get(UUID accountId) {
 
-        Account account = accountRepository.findById(accountId);
-        if (account == null) {
-            throw new AccountNotFoundException("No account found with this id");
-        }
-
-        return account;
+        return accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException("No account found with this id"));
     }
 }
