@@ -1,3 +1,5 @@
+import exception.AccountNotFoundException;
+
 import java.util.UUID;
 
 public class GetAccountUseCase {
