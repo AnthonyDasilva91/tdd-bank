@@ -1,5 +1,7 @@
 package com.tddbank.usecase;
 
+import com.tddbank.domain.entity.Account;
+import com.tddbank.domain.exception.AccountNotFoundException;
 import com.tddbank.domain.exception.NotValidAmountException;
 import com.tddbank.usecase.port.AccountRepository;
 
@@ -15,10 +17,11 @@ public class DepositUseCase {
 
     public void deposit(UUID accountId, double amount) {
 
-        accountRepository.findById(accountId).ifPresent(account -> {
-            if (amount <= 0) {
-                throw new NotValidAmountException("Amount cannot be zero !");
-            }
-        });
+        accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException("Account not found !"));
+
+        if (amount <= 0) {
+            throw new NotValidAmountException("Amount cannot be zero !");
+        }
     }
 }
