@@ -1,6 +1,7 @@
 package com.tddbank.usecase;
 
 import com.tddbank.domain.entity.Account;
+import com.tddbank.domain.exception.NotValidAmountException;
 import com.tddbank.usecase.port.AccountRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
