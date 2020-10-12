@@ -1,6 +1,13 @@
-import exception.AccountNotFoundException;
+package com.tddbank.usecase;
+
+import com.tddbank.domain.entity.Account;
+import com.tddbank.usecase.account.CreateAccountUseCase;
+import com.tddbank.usecase.account.GetAccountUseCase;
+import com.tddbank.domain.exception.AccountNotFoundException;
+import com.tddbank.usecase.port.AccountRepositoryImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import com.tddbank.usecase.port.AccountRepository;
 
 import java.util.UUID;
 
@@ -14,7 +21,7 @@ public class GetAccountUseCaseTest {
 
     @BeforeAll
     static void setUp() {
-        AccountRepository accountRepository = new AccountRepository();
+        AccountRepository accountRepository = new AccountRepositoryImpl();
         createAccountUseCase = new CreateAccountUseCase(accountRepository);
         getAccountUseCase = new GetAccountUseCase(accountRepository);
     }

@@ -1,4 +1,4 @@
-package exception;
+package com.tddbank.domain.exception;
 
 public class AccountNotFoundException extends DomainException {
 

@@ -1,3 +1,5 @@
+package com.tddbank.domain.entity;
+
 import java.util.UUID;
 
 public class Account {
