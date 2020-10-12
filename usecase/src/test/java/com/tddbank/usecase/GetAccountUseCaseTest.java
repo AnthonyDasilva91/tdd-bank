@@ -46,4 +46,13 @@ public class GetAccountUseCaseTest {
         // Assert
         assertEquals(createdAccount, existingAccount);
     }
+
+    @Test
+    void should_throw_exception_when_account_id_is_null() {
+        // Arrange
+        Account createdAccount = createAccountUseCase.create();
+
+        // Act & Assert
+        assertThrows(NullPointerException.class, () -> getAccountUseCase.get(null));
+    }
 }
