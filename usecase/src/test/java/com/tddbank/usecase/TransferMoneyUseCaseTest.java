@@ -2,6 +2,7 @@ package com.tddbank.usecase;
 
 import com.tddbank.domain.exception.AccountNotFoundException;
 import com.tddbank.usecase.account.CreateAccountUseCase;
+import com.tddbank.usecase.money.TransferMoneyUseCase;
 import com.tddbank.usecase.port.AccountRepository;
 import com.tddbank.usecase.port.AccountRepositoryImpl;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ public class TransferMoneyUseCaseTest {
         // Arrange
         AccountRepository accountRepository = new AccountRepositoryImpl();
         CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase(accountRepository);
-        TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyUseCase();
+        TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyUseCase(accountRepository);
 
         UUID notExistingPayerId = UUID.randomUUID();
         UUID payeeAccountId = createAccountUseCase.create().getId();
