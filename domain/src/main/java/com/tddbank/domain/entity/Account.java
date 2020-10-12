@@ -36,5 +36,7 @@ public class Account {
         if (amount <= 0) {
             throw new NotValidAmountException("Amount cannot be negative or zero !");
         }
+
+        this.amount -= amount;
     }
 }

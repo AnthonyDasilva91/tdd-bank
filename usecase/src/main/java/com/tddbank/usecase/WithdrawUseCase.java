@@ -20,5 +20,7 @@ public class WithdrawUseCase {
                 .orElseThrow(() -> new AccountNotFoundException("Account not found !"));
 
         account.withdraw(amount);
+
+        accountRepository.save(account);
     }
 }
