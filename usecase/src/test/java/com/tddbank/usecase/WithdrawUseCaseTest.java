@@ -35,4 +35,17 @@ public class WithdrawUseCaseTest {
         // Act & Assert
         Assertions.assertThrows(NotValidAmountException.class, () -> withdrawUseCase.withdraw(existingAccountId, 0));
     }
+
+    @Test
+    void should_throw_exception_when_withdraw_is_negative() {
+
+        // Arrange
+        UUID existingAccountId = UUID.randomUUID();
+        Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.of(new Account()));
+
+        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(mockAccountRepository);
+
+        // Act & Assert
+        Assertions.assertThrows(NotValidAmountException.class, () -> withdrawUseCase.withdraw(existingAccountId, -1));
+    }
 }
