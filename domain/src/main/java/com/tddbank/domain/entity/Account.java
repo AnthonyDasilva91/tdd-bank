@@ -25,9 +25,16 @@ public class Account {
     public void deposit(double amount) {
 
         if (amount <= 0) {
-            throw new NotValidAmountException("Amount cannot be zero !");
+            throw new NotValidAmountException("Amount cannot be negative or zero !");
         }
 
         this.amount += amount;
+    }
+
+    public void withdraw(double amount) {
+
+        if (amount == 0) {
+            throw new NotValidAmountException("Amount cannot be zero !");
+        }
     }
 }
