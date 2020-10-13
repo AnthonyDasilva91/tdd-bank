@@ -18,12 +18,18 @@ public class GetAllAccountTransactionsUseCase {
         this.accountTransactionRepository = accountTransactionRepository;
     }
 
-    public List<AccountTransaction> getAllTransactionsOf(UUID accountA, UUID accountB) {
+    /**
+     * Return all transfers made by both accounts
+     * @param fromAccountId the id of the payer account
+     * @param toAccountId the id of the payee account
+     * @return a list containing the transfers made by both accounts
+     */
+    public List<AccountTransaction> getAllTransactionsOf(UUID fromAccountId, UUID toAccountId) {
         List<AccountTransaction> transactionOfAccountA =
-                accountTransactionRepository.findTransactionsFromBothAccounts(accountA, accountB);
+                accountTransactionRepository.findTransactionsFromBothAccounts(fromAccountId, toAccountId);
 
         List<AccountTransaction> transactionOfAccountB =
-                accountTransactionRepository.findTransactionsFromBothAccounts(accountB, accountA);
+                accountTransactionRepository.findTransactionsFromBothAccounts(toAccountId, fromAccountId);
 
         return Stream.concat(transactionOfAccountA.stream(), transactionOfAccountB.stream())
                 .collect(Collectors.toList());

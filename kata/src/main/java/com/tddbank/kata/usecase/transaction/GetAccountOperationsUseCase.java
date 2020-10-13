@@ -16,6 +16,11 @@ public class GetAccountOperationsUseCase {
         this.accountTransactionRepository = accountTransactionRepository;
     }
 
+    /**
+     * Return all the operations (deposit and withdrawal) of a specific account
+     * @param accountId the id of the account we want to retrieve it's operations
+     * @return a list containing the operations of the account
+     */
     public List<AccountTransaction> getOperationsOf(UUID accountId) {
         return accountTransactionRepository.findOperationsOf(accountId);
     }
