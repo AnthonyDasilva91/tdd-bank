@@ -85,11 +85,12 @@ public class DepositUseCaseTest {
         Account existingAccount = new Account();
         accountRepository.save(existingAccount);
 
+        double deposit = 10;
         double expectedAmount = 10;
         int expectedTransactionNumber = 1;
 
         // Act
-        depositUseCase.deposit(existingAccount.getId(), 10);
+        depositUseCase.deposit(existingAccount.getId(), deposit);
 
         // Assert
         Optional<Account> optionalAccount = accountRepository.findById(existingAccount.getId());
@@ -98,6 +99,6 @@ public class DepositUseCaseTest {
 
         List<AccountTransaction> transactions = accountTransactionRepository.findByFromAccountId(existingAccount.getId());
         assertEquals(expectedTransactionNumber, transactions.size());
-        assertEquals(expectedAmount, transactions.get(0).getAmount());
+        assertEquals(deposit, transactions.get(0).getAmount());
     }
 }

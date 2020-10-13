@@ -1,10 +1,12 @@
 package com.tddbank.kata.usecase.money;
 
 import com.tddbank.kata.domain.entity.Account;
+import com.tddbank.kata.domain.entity.AccountTransaction;
 import com.tddbank.kata.domain.exception.AccountNotFoundException;
 import com.tddbank.kata.domain.exception.NotEnoughMoneyException;
 import com.tddbank.kata.domain.exception.NotValidAmountException;
 import com.tddbank.kata.persistence.AccountRepository;
+import com.tddbank.kata.persistence.AccountTransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,6 +27,10 @@ public class WithdrawUseCaseTest {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private AccountTransactionRepository accountTransactionRepository;
+
     private AccountRepository mockAccountRepository;
 
     @BeforeEach
@@ -93,14 +100,20 @@ public class WithdrawUseCaseTest {
         existingAccount.deposit(100);
         accountRepository.save(existingAccount);
 
-        double expected = 90;
+        double expectedAmount = 90;
+        double withdrawal = 10;
+        int expectedTransactionNumber = 1;
 
         // Act
-        withdrawUseCase.withdraw(existingAccount.getId(), 10);
+        withdrawUseCase.withdraw(existingAccount.getId(), withdrawal);
 
         // Assert
         Optional<Account> optionalAccount = accountRepository.findById(existingAccount.getId());
         assertTrue(optionalAccount.isPresent());
-        assertEquals(expected, optionalAccount.get().getAmount());
+        assertEquals(expectedAmount, optionalAccount.get().getAmount());
+
+        List<AccountTransaction> transactions = accountTransactionRepository.findByFromAccountId(existingAccount.getId());
+        assertEquals(expectedTransactionNumber, transactions.size());
+        assertEquals(withdrawal, transactions.get(0).getAmount());
     }
 }
