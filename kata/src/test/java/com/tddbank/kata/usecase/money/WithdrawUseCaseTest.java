@@ -45,7 +45,7 @@ public class WithdrawUseCaseTest {
         UUID existingAccountId = UUID.randomUUID();
         Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.of(new Account()));
 
-        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(mockAccountRepository);
+        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(mockAccountRepository, accountTransactionRepository);
 
         // Act & Assert
         assertThrows(NotValidAmountException.class, () -> withdrawUseCase.withdraw(existingAccountId, 0));
@@ -58,7 +58,7 @@ public class WithdrawUseCaseTest {
         UUID existingAccountId = UUID.randomUUID();
         Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.of(new Account()));
 
-        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(mockAccountRepository);
+        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(mockAccountRepository, accountTransactionRepository);
 
         // Act & Assert
         assertThrows(NotValidAmountException.class, () -> withdrawUseCase.withdraw(existingAccountId, -1));
@@ -71,7 +71,7 @@ public class WithdrawUseCaseTest {
         UUID existingAccountId = UUID.randomUUID();
         Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.empty());
 
-        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(mockAccountRepository);
+        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(mockAccountRepository, accountTransactionRepository);
 
         // Act & Assert
         assertThrows(AccountNotFoundException.class, () -> withdrawUseCase.withdraw(existingAccountId, -1));
@@ -81,7 +81,7 @@ public class WithdrawUseCaseTest {
     void should_throw_exception_when_not_enough_money_on_account() {
 
         // Arrange
-        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(accountRepository);
+        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(accountRepository, accountTransactionRepository);
 
         Account existingAccount = new Account();
         accountRepository.save(existingAccount);
@@ -94,7 +94,7 @@ public class WithdrawUseCaseTest {
     void amount_should_decrease_of_10_when_withdrawal_of_10() {
 
         // Arrange
-        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(accountRepository);
+        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(accountRepository, accountTransactionRepository);
 
         Account existingAccount = new Account();
         existingAccount.deposit(100);
