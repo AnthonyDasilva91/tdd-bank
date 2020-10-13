@@ -4,9 +4,10 @@ import com.tddbank.kata.domain.entity.AccountTransaction;
 import com.tddbank.kata.persistence.AccountTransactionRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class GetAllAccountTransactionsUseCase {
@@ -18,6 +19,13 @@ public class GetAllAccountTransactionsUseCase {
     }
 
     public List<AccountTransaction> getAllTransactionsOf(UUID accountA, UUID accountB) {
-        return new ArrayList<>();
+        List<AccountTransaction> transactionOfAccountA =
+                accountTransactionRepository.findTransactionFromBothAccounts(accountA, accountB);
+
+        List<AccountTransaction> transactionOfAccountB =
+                accountTransactionRepository.findTransactionFromBothAccounts(accountB, accountA);
+
+        return Stream.concat(transactionOfAccountA.stream(), transactionOfAccountB.stream())
+                .collect(Collectors.toList());
     }
 }
