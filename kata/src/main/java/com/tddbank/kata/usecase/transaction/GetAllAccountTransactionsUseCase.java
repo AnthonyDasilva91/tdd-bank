@@ -17,7 +17,7 @@ public class GetAllAccountTransactionsUseCase {
         this.accountTransactionRepository = accountTransactionRepository;
     }
 
-    public List<AccountTransaction> getAllTransactionsOf(UUID accountId) {
+    public List<AccountTransaction> getAllTransactionsOf(UUID accountA, UUID accountB) {
         return new ArrayList<>();
     }
 }
