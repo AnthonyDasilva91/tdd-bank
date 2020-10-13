@@ -20,10 +20,10 @@ public class GetAllAccountTransactionsUseCase {
 
     public List<AccountTransaction> getAllTransactionsOf(UUID accountA, UUID accountB) {
         List<AccountTransaction> transactionOfAccountA =
-                accountTransactionRepository.findTransactionFromBothAccounts(accountA, accountB);
+                accountTransactionRepository.findTransactionsFromBothAccounts(accountA, accountB);
 
         List<AccountTransaction> transactionOfAccountB =
-                accountTransactionRepository.findTransactionFromBothAccounts(accountB, accountA);
+                accountTransactionRepository.findTransactionsFromBothAccounts(accountB, accountA);
 
         return Stream.concat(transactionOfAccountA.stream(), transactionOfAccountB.stream())
                 .collect(Collectors.toList());

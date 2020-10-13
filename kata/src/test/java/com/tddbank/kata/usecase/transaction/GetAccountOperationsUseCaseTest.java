@@ -15,7 +15,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class GetAccountTransactionsUseCaseTest {
+public class GetAccountOperationsUseCaseTest {
 
     @Autowired
     private AccountRepository accountRepository;
@@ -25,7 +25,7 @@ public class GetAccountTransactionsUseCaseTest {
     @Autowired
     private WithdrawUseCase withdrawUseCase;
     @Autowired
-    private GetAccountTransactionsUseCase getAccountTransactionsUseCase;
+    private GetAccountOperationsUseCase getAccountOperationsUseCase;
 
     @Test
     void should_return_no_transaction_when_nothing_is_done() {
@@ -33,7 +33,7 @@ public class GetAccountTransactionsUseCaseTest {
         int expectedTransactionNumber = 0;
 
         // Act
-        List<AccountTransaction> transactions = getAccountTransactionsUseCase.getTransactionsOf(UUID.randomUUID());
+        List<AccountTransaction> transactions = getAccountOperationsUseCase.getOperationsOf(UUID.randomUUID());
 
         // Assert
         assertEquals(expectedTransactionNumber, transactions.size());
@@ -51,7 +51,7 @@ public class GetAccountTransactionsUseCaseTest {
         int expectedTransactionNumber = 3;
 
         // Act
-        List<AccountTransaction> transactions = getAccountTransactionsUseCase.getTransactionsOf(account.getId());
+        List<AccountTransaction> transactions = getAccountOperationsUseCase.getOperationsOf(account.getId());
 
         // Assert
         assertEquals(expectedTransactionNumber, transactions.size());

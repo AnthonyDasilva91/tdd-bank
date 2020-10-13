@@ -113,7 +113,7 @@ public class DepositUseCaseTest {
         depositUseCase.deposit(existingAccount.getId(), deposit);
 
         // Assert
-        List<AccountTransaction> transactions = accountTransactionRepository.findByFromAccountId(existingAccount.getId());
+        List<AccountTransaction> transactions = accountTransactionRepository.findOperationsOf(existingAccount.getId());
         assertEquals(expectedTransactionNumber, transactions.size());
 
         AccountTransaction accountTransaction = transactions.get(0);

@@ -11,8 +11,9 @@ import java.util.UUID;
 @Repository
 public interface AccountTransactionRepository extends CrudRepository<AccountTransaction, UUID> {
 
-    List<AccountTransaction> findByFromAccountId(UUID fromAccountId);
+    @Query("SELECT ac FROM AccountTransaction ac WHERE ac.fromAccountId = :fromAccountId AND ac.toAccountId IS NULL")
+    List<AccountTransaction> findOperationsOf(UUID fromAccountId);
 
     @Query("SELECT ac FROM AccountTransaction ac WHERE ac.fromAccountId = :fromAccountId AND ac.toAccountId = :toAccountId")
-    List<AccountTransaction> findTransactionFromBothAccounts(UUID fromAccountId, UUID toAccountId);
+    List<AccountTransaction> findTransactionsFromBothAccounts(UUID fromAccountId, UUID toAccountId);
 }

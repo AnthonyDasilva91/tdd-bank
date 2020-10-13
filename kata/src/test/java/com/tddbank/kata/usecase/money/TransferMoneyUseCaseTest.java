@@ -110,7 +110,8 @@ public class TransferMoneyUseCaseTest {
         transferMoneyUseCase.transfer(payer.getId(), payee.getId(), transferAmount);
 
         // Assert
-        List<AccountTransaction> transactions = accountTransactionRepository.findByFromAccountId(payer.getId());
+        List<AccountTransaction> transactions =
+                accountTransactionRepository.findTransactionsFromBothAccounts(payer.getId(), payee.getId());
         assertEquals(expectedTransactionNumber, transactions.size());
 
         AccountTransaction accountTransaction = transactions.get(0);

@@ -8,15 +8,15 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class GetAccountTransactionsUseCase {
+public class GetAccountOperationsUseCase {
 
     private final AccountTransactionRepository accountTransactionRepository;
 
-    public GetAccountTransactionsUseCase(AccountTransactionRepository accountTransactionRepository) {
+    public GetAccountOperationsUseCase(AccountTransactionRepository accountTransactionRepository) {
         this.accountTransactionRepository = accountTransactionRepository;
     }
 
-    public List<AccountTransaction> getTransactionsOf(UUID accountId) {
-        return accountTransactionRepository.findByFromAccountId(accountId);
+    public List<AccountTransaction> getOperationsOf(UUID accountId) {
+        return accountTransactionRepository.findOperationsOf(accountId);
     }
 }
