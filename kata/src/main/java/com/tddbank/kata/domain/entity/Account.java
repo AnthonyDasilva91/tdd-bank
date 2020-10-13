@@ -2,12 +2,21 @@ package com.tddbank.kata.domain.entity;
 
 import com.tddbank.kata.domain.exception.NotEnoughMoneyException;
 import com.tddbank.kata.domain.exception.NotValidAmountException;
+import org.springframework.lang.NonNull;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.util.Objects;
 import java.util.UUID;
 
+@Entity
 public class Account {
 
-    private UUID id;
+    @Id
+    @NonNull
+    private final UUID id;
+
+    @NonNull
     private double amount;
 
     public Account() {
@@ -43,5 +52,18 @@ public class Account {
         }
 
         this.amount -= amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return id.equals(account.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

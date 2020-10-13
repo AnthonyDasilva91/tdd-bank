@@ -2,10 +2,11 @@ package com.tddbank.kata.usecase.money;
 
 import com.tddbank.kata.domain.entity.Account;
 import com.tddbank.kata.domain.exception.AccountNotFoundException;
+import com.tddbank.kata.persistence.AccountRepository;
 import com.tddbank.kata.usecase.account.CreateAccountUseCase;
-import com.tddbank.kata.usecase.port.AccountRepository;
-import com.tddbank.kata.usecase.port.AccountRepositoryImpl;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -14,12 +15,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SpringBootTest
 public class TransferMoneyUseCaseTest {
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Test
     void should_throw_exception_when_payer_not_exists() {
         // Arrange
-        AccountRepository accountRepository = new AccountRepositoryImpl();
         CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase(accountRepository);
         TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyUseCase(accountRepository);
 
@@ -34,7 +38,6 @@ public class TransferMoneyUseCaseTest {
     @Test
     void should_throw_exception_when_payee_not_exists() {
         // Arrange
-        AccountRepository accountRepository = new AccountRepositoryImpl();
         CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase(accountRepository);
         TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyUseCase(accountRepository);
 
@@ -50,7 +53,6 @@ public class TransferMoneyUseCaseTest {
     void should_throw_exception_when_payee_not_exist() {
 
         // Arrange
-        AccountRepository accountRepository = new AccountRepositoryImpl();
         TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyUseCase(accountRepository);
 
         Account payer = new Account();

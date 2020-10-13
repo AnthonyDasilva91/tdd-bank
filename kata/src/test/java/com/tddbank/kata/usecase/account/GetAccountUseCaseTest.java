@@ -2,24 +2,28 @@ package com.tddbank.kata.usecase.account;
 
 import com.tddbank.kata.domain.entity.Account;
 import com.tddbank.kata.domain.exception.AccountNotFoundException;
-import com.tddbank.kata.usecase.port.AccountRepository;
-import com.tddbank.kata.usecase.port.AccountRepositoryImpl;
-import org.junit.jupiter.api.BeforeAll;
+import com.tddbank.kata.persistence.AccountRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SpringBootTest
 public class GetAccountUseCaseTest {
 
-    private static CreateAccountUseCase createAccountUseCase;
-    private static GetAccountUseCase getAccountUseCase;
+    @Autowired
+    private AccountRepository accountRepository;
 
-    @BeforeAll
-    static void setUp() {
-        AccountRepository accountRepository = new AccountRepositoryImpl();
+    private CreateAccountUseCase createAccountUseCase;
+    private GetAccountUseCase getAccountUseCase;
+
+    @BeforeEach
+    void setUp() {
         createAccountUseCase = new CreateAccountUseCase(accountRepository);
         getAccountUseCase = new GetAccountUseCase(accountRepository);
     }

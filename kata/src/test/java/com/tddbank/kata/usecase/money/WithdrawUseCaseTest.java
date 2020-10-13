@@ -4,24 +4,26 @@ import com.tddbank.kata.domain.entity.Account;
 import com.tddbank.kata.domain.exception.AccountNotFoundException;
 import com.tddbank.kata.domain.exception.NotEnoughMoneyException;
 import com.tddbank.kata.domain.exception.NotValidAmountException;
-import com.tddbank.kata.usecase.port.AccountRepository;
-import com.tddbank.kata.usecase.port.AccountRepositoryImpl;
+import com.tddbank.kata.persistence.AccountRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class WithdrawUseCaseTest {
 
+    @Autowired
+    private AccountRepository accountRepository;
     private AccountRepository mockAccountRepository;
 
     @BeforeEach
@@ -72,7 +74,6 @@ public class WithdrawUseCaseTest {
     void should_throw_exception_when_not_enough_money_on_account() {
 
         // Arrange
-        AccountRepository accountRepository = new AccountRepositoryImpl();
         WithdrawUseCase withdrawUseCase = new WithdrawUseCase(accountRepository);
 
         Account existingAccount = new Account();
@@ -86,7 +87,6 @@ public class WithdrawUseCaseTest {
     void amount_should_decrease_of_10_when_withdrawal_of_10() {
 
         // Arrange
-        AccountRepository accountRepository = new AccountRepositoryImpl();
         WithdrawUseCase withdrawUseCase = new WithdrawUseCase(accountRepository);
 
         Account existingAccount = new Account();

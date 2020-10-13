@@ -2,10 +2,13 @@ package com.tddbank.kata.usecase.money;
 
 import com.tddbank.kata.domain.entity.Account;
 import com.tddbank.kata.domain.exception.AccountNotFoundException;
-import com.tddbank.kata.usecase.port.AccountRepository;
+import com.tddbank.kata.persistence.AccountRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Service
 public class WithdrawUseCase {
 
     private final AccountRepository accountRepository;
@@ -21,6 +24,7 @@ public class WithdrawUseCase {
      * @param amount    the amount of the withdrawal
      * @throws AccountNotFoundException if no account found with this id
      */
+    @Transactional
     public void withdraw(UUID accountId, double amount) {
 
         Account account = accountRepository.findById(accountId)
