@@ -1,4 +1,4 @@
-package com.tddbank.kata.presentation;
+package com.tddbank.kata.presentation.controller;
 
 public class ErrorResponse {
 

@@ -1,4 +1,4 @@
-package com.tddbank.kata.presentation;
+package com.tddbank.kata.presentation.controller;
 
 import com.tddbank.kata.domain.entity.Account;
 import com.tddbank.kata.usecase.account.CreateAccountUseCase;

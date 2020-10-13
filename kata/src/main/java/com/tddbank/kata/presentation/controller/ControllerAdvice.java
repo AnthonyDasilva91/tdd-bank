@@ -1,4 +1,4 @@
-package com.tddbank.kata.presentation;
+package com.tddbank.kata.presentation.controller;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
