@@ -102,7 +102,6 @@ public class WithdrawUseCaseTest {
 
         double expectedAmount = 90;
         double withdrawal = 10;
-        int expectedTransactionNumber = 1;
 
         // Act
         withdrawUseCase.withdraw(existingAccount.getId(), withdrawal);
@@ -111,7 +110,25 @@ public class WithdrawUseCaseTest {
         Optional<Account> optionalAccount = accountRepository.findById(existingAccount.getId());
         assertTrue(optionalAccount.isPresent());
         assertEquals(expectedAmount, optionalAccount.get().getAmount());
+    }
 
+    @Test
+    void transaction_should_be_saved_when_a_withdrawal_is_made() {
+
+        // Arrange
+        WithdrawUseCase withdrawUseCase = new WithdrawUseCase(accountRepository, accountTransactionRepository);
+
+        Account existingAccount = new Account();
+        existingAccount.deposit(100);
+        accountRepository.save(existingAccount);
+
+        double withdrawal = 10;
+        int expectedTransactionNumber = 1;
+
+        // Act
+        withdrawUseCase.withdraw(existingAccount.getId(), withdrawal);
+
+        // Assert
         List<AccountTransaction> transactions = accountTransactionRepository.findByFromAccountId(existingAccount.getId());
         assertEquals(expectedTransactionNumber, transactions.size());
 

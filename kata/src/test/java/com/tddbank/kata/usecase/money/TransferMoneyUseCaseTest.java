@@ -14,9 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class TransferMoneyUseCaseTest {
@@ -74,7 +72,6 @@ public class TransferMoneyUseCaseTest {
         double transferAmount = 10;
         double expectedPayerAmount = 90;
         double expectedPayeeAmount = 110;
-        int expectedTransactionNumber = 1;
 
         // Act
         transferMoneyUseCase.transfer(payer.getId(), payee.getId(), transferAmount);
@@ -88,7 +85,31 @@ public class TransferMoneyUseCaseTest {
 
         assertTrue(optionalPayeeAccount.isPresent());
         assertEquals(expectedPayeeAmount, optionalPayeeAccount.get().getAmount());
+    }
 
+    @Test
+    void transaction_should_be_saved_when_a_transfer_is_made() {
+
+        // Arrange
+        TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyUseCase(accountRepository, accountTransactionRepository);
+
+        Account payer = new Account();
+        Account payee = new Account();
+
+        // Add money on both accounts
+        payer.deposit(100);
+        payee.deposit(100);
+
+        accountRepository.save(payer);
+        accountRepository.save(payee);
+
+        double transferAmount = 10;
+        int expectedTransactionNumber = 1;
+
+        // Act
+        transferMoneyUseCase.transfer(payer.getId(), payee.getId(), transferAmount);
+
+        // Assert
         List<AccountTransaction> transactions = accountTransactionRepository.findByFromAccountId(payer.getId());
         assertEquals(expectedTransactionNumber, transactions.size());
 

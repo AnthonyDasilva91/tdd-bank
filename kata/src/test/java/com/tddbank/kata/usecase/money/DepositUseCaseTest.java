@@ -87,7 +87,6 @@ public class DepositUseCaseTest {
 
         double deposit = 10;
         double expectedAmount = 10;
-        int expectedTransactionNumber = 1;
 
         // Act
         depositUseCase.deposit(existingAccount.getId(), deposit);
@@ -96,7 +95,24 @@ public class DepositUseCaseTest {
         Optional<Account> optionalAccount = accountRepository.findById(existingAccount.getId());
         assertTrue(optionalAccount.isPresent());
         assertEquals(expectedAmount, optionalAccount.get().getAmount());
+    }
 
+    @Test
+    void transaction_should_be_saved_when_a_deposit_is_made() {
+
+        // Arrange
+        DepositUseCase depositUseCase = new DepositUseCase(accountRepository, accountTransactionRepository);
+
+        Account existingAccount = new Account();
+        accountRepository.save(existingAccount);
+
+        double deposit = 10;
+        int expectedTransactionNumber = 1;
+
+        // Act
+        depositUseCase.deposit(existingAccount.getId(), deposit);
+
+        // Assert
         List<AccountTransaction> transactions = accountTransactionRepository.findByFromAccountId(existingAccount.getId());
         assertEquals(expectedTransactionNumber, transactions.size());
 
