@@ -23,6 +23,10 @@ public class DepositUseCaseTest {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private AccountTransactionRepository accountTransactionRepository;
+
     private AccountRepository mockAccountRepository;
 
     @BeforeEach
@@ -75,9 +79,11 @@ public class DepositUseCaseTest {
         // Arrange
         DepositUseCase depositUseCase = new DepositUseCase(accountRepository);
 
-        double expected = 10;
         Account existingAccount = new Account();
         accountRepository.save(existingAccount);
+
+        double expectedAmount = 10;
+        int expectedTransactionNumber = 1;
 
         // Act
         depositUseCase.deposit(existingAccount.getId(), 10);
@@ -85,6 +91,11 @@ public class DepositUseCaseTest {
         // Assert
         Optional<Account> optionalAccount = accountRepository.findById(existingAccount.getId());
         assertTrue(optionalAccount.isPresent());
-        assertEquals(expected, optionalAccount.get().getAmount());
+        assertEquals(expectedAmount, optionalAccount.get().getAmount());
+
+        List<AccountTransaction> transactions = accountTransactionRepository.findByAccountId(existingAccount.getId());
+        assertEquals(expectedTransactionNumber, transactions.size());
+        assertEquals(AccountTransactionType.DEPOSIT, expectedTransactionNumber.get(0).getType());
+        assertEquals(expectedAmount, expectedTransactionNumber.get(0).getAmount());
     }
 }
