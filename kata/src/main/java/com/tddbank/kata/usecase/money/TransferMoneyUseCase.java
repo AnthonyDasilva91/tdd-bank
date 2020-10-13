@@ -1,8 +1,10 @@
 package com.tddbank.kata.usecase.money;
 
 import com.tddbank.kata.domain.entity.Account;
+import com.tddbank.kata.domain.entity.AccountTransaction;
 import com.tddbank.kata.domain.exception.AccountNotFoundException;
 import com.tddbank.kata.persistence.AccountRepository;
+import com.tddbank.kata.persistence.AccountTransactionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,9 +14,11 @@ import java.util.UUID;
 public class TransferMoneyUseCase {
 
     private final AccountRepository accountRepository;
+    private final AccountTransactionRepository accountTransactionRepository;
 
-    public TransferMoneyUseCase(AccountRepository accountRepository) {
+    public TransferMoneyUseCase(AccountRepository accountRepository, AccountTransactionRepository accountTransactionRepository) {
         this.accountRepository = accountRepository;
+        this.accountTransactionRepository = accountTransactionRepository;
     }
 
     /**
@@ -38,5 +42,7 @@ public class TransferMoneyUseCase {
 
         accountRepository.save(payer);
         accountRepository.save(payee);
+
+        accountTransactionRepository.save(new AccountTransaction(payer.getId(), payee.getId(), amount));
     }
 }

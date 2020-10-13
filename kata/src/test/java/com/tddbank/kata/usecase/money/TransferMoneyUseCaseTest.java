@@ -31,7 +31,7 @@ public class TransferMoneyUseCaseTest {
     void should_throw_exception_when_payer_not_exists() {
         // Arrange
         CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase(accountRepository);
-        TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyUseCase(accountRepository);
+        TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyUseCase(accountRepository, accountTransactionRepository);
 
         UUID notExistingPayerId = UUID.randomUUID();
         UUID payeeAccountId = createAccountUseCase.create().getId();
@@ -45,7 +45,7 @@ public class TransferMoneyUseCaseTest {
     void should_throw_exception_when_payee_not_exists() {
         // Arrange
         CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase(accountRepository);
-        TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyUseCase(accountRepository);
+        TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyUseCase(accountRepository, accountTransactionRepository);
 
         UUID notExistingPayeeId = UUID.randomUUID();
         UUID payerAccountId = createAccountUseCase.create().getId();
@@ -59,7 +59,7 @@ public class TransferMoneyUseCaseTest {
     void should_throw_exception_when_payee_not_exist() {
 
         // Arrange
-        TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyUseCase(accountRepository);
+        TransferMoneyUseCase transferMoneyUseCase = new TransferMoneyUseCase(accountRepository, accountTransactionRepository);
 
         Account payer = new Account();
         Account payee = new Account();
