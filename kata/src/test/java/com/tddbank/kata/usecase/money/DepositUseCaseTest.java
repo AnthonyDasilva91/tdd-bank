@@ -1,9 +1,11 @@
 package com.tddbank.kata.usecase.money;
 
 import com.tddbank.kata.domain.entity.Account;
+import com.tddbank.kata.domain.entity.AccountTransaction;
 import com.tddbank.kata.domain.exception.AccountNotFoundException;
 import com.tddbank.kata.domain.exception.NotValidAmountException;
 import com.tddbank.kata.persistence.AccountRepository;
+import com.tddbank.kata.persistence.AccountTransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,7 +44,7 @@ public class DepositUseCaseTest {
         UUID existingAccountId = UUID.randomUUID();
         Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.of(new Account()));
 
-        DepositUseCase depositUseCase = new DepositUseCase(mockAccountRepository);
+        DepositUseCase depositUseCase = new DepositUseCase(mockAccountRepository, accountTransactionRepository);
 
         // Act & Assert
         assertThrows(NotValidAmountException.class, () -> depositUseCase.deposit(existingAccountId, 0));
@@ -54,7 +57,7 @@ public class DepositUseCaseTest {
         UUID existingAccountId = UUID.randomUUID();
         Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.of(new Account()));
 
-        DepositUseCase depositUseCase = new DepositUseCase(mockAccountRepository);
+        DepositUseCase depositUseCase = new DepositUseCase(mockAccountRepository, accountTransactionRepository);
 
         // Act & Assert
         assertThrows(NotValidAmountException.class, () -> depositUseCase.deposit(existingAccountId, -1));
@@ -67,7 +70,7 @@ public class DepositUseCaseTest {
         UUID existingAccountId = UUID.randomUUID();
         Mockito.when(mockAccountRepository.findById(existingAccountId)).thenReturn(Optional.empty());
 
-        DepositUseCase depositUseCase = new DepositUseCase(mockAccountRepository);
+        DepositUseCase depositUseCase = new DepositUseCase(mockAccountRepository, accountTransactionRepository);
 
         // Act & Assert
         assertThrows(AccountNotFoundException.class, () -> depositUseCase.deposit(existingAccountId, -1));
@@ -77,7 +80,7 @@ public class DepositUseCaseTest {
     void amount_should_be_10_when_deposit_is_10() {
 
         // Arrange
-        DepositUseCase depositUseCase = new DepositUseCase(accountRepository);
+        DepositUseCase depositUseCase = new DepositUseCase(accountRepository, accountTransactionRepository);
 
         Account existingAccount = new Account();
         accountRepository.save(existingAccount);
@@ -93,9 +96,8 @@ public class DepositUseCaseTest {
         assertTrue(optionalAccount.isPresent());
         assertEquals(expectedAmount, optionalAccount.get().getAmount());
 
-        List<AccountTransaction> transactions = accountTransactionRepository.findByAccountId(existingAccount.getId());
+        List<AccountTransaction> transactions = accountTransactionRepository.findByFromAccountId(existingAccount.getId());
         assertEquals(expectedTransactionNumber, transactions.size());
-        assertEquals(AccountTransactionType.DEPOSIT, expectedTransactionNumber.get(0).getType());
-        assertEquals(expectedAmount, expectedTransactionNumber.get(0).getAmount());
+        assertEquals(expectedAmount, transactions.get(0).getAmount());
     }
 }
