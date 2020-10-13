@@ -114,6 +114,9 @@ public class WithdrawUseCaseTest {
 
         List<AccountTransaction> transactions = accountTransactionRepository.findByFromAccountId(existingAccount.getId());
         assertEquals(expectedTransactionNumber, transactions.size());
-        assertEquals(withdrawal, transactions.get(0).getAmount());
+
+        AccountTransaction accountTransaction = transactions.get(0);
+        assertEquals(existingAccount.getId(), accountTransaction.getFromAccountId());
+        assertEquals(withdrawal, accountTransaction.getAmount());
     }
 }

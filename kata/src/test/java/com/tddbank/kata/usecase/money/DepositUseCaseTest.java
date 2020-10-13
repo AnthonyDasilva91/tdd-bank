@@ -98,7 +98,8 @@ public class DepositUseCaseTest {
         assertEquals(expectedAmount, optionalAccount.get().getAmount());
 
         List<AccountTransaction> transactions = accountTransactionRepository.findByFromAccountId(existingAccount.getId());
-        assertEquals(expectedTransactionNumber, transactions.size());
-        assertEquals(deposit, transactions.get(0).getAmount());
+        AccountTransaction accountTransaction = transactions.get(0);
+        assertEquals(existingAccount.getId(), accountTransaction.getFromAccountId());
+        assertEquals(deposit, accountTransaction.getAmount());
     }
 }
