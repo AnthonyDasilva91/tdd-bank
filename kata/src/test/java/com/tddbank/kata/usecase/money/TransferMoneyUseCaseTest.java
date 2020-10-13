@@ -1,13 +1,16 @@
 package com.tddbank.kata.usecase.money;
 
 import com.tddbank.kata.domain.entity.Account;
+import com.tddbank.kata.domain.entity.AccountTransaction;
 import com.tddbank.kata.domain.exception.AccountNotFoundException;
 import com.tddbank.kata.persistence.AccountRepository;
+import com.tddbank.kata.persistence.AccountTransactionRepository;
 import com.tddbank.kata.usecase.account.CreateAccountUseCase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,6 +23,9 @@ public class TransferMoneyUseCaseTest {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private AccountTransactionRepository accountTransactionRepository;
 
     @Test
     void should_throw_exception_when_payer_not_exists() {
@@ -65,11 +71,13 @@ public class TransferMoneyUseCaseTest {
         accountRepository.save(payer);
         accountRepository.save(payee);
 
+        double transferAmount = 10;
         double expectedPayerAmount = 90;
         double expectedPayeeAmount = 110;
+        int expectedTransactionNumber = 1;
 
         // Act
-        transferMoneyUseCase.transfer(payer.getId(), payee.getId(), 10);
+        transferMoneyUseCase.transfer(payer.getId(), payee.getId(), transferAmount);
 
         // Assert
         Optional<Account> optionalPayerAccount = accountRepository.findById(payer.getId());
@@ -80,5 +88,13 @@ public class TransferMoneyUseCaseTest {
 
         assertTrue(optionalPayeeAccount.isPresent());
         assertEquals(expectedPayeeAmount, optionalPayeeAccount.get().getAmount());
+
+        List<AccountTransaction> transactions = accountTransactionRepository.findByFromAccountId(payer.getId());
+        assertEquals(expectedTransactionNumber, transactions.size());
+
+        AccountTransaction accountTransaction = transactions.get(0);
+        assertEquals(payer.getId(), accountTransaction.getFromAccountId());
+        assertEquals(payee.getId(), accountTransaction.getToAccountId());
+        assertEquals(transferAmount, accountTransaction.getAmount());
     }
 }
