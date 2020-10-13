@@ -36,7 +36,7 @@ public class GetAccountTransactionsUseCaseTest {
         int expectedTransactionNumber = 0;
 
         // Act
-        List<AccountTransaction> transactions = accountTransactionRepository.findByFromAccountId(UUID.randomUUID());
+        List<AccountTransaction> transactions = getAccountTransactionsUseCase.getTransactionsOf(UUID.randomUUID());
 
         // Assert
         assertEquals(expectedTransactionNumber, transactions.size());
@@ -54,7 +54,7 @@ public class GetAccountTransactionsUseCaseTest {
         int expectedTransactionNumber = 3;
 
         // Act
-        List<AccountTransaction> transactions = getAccountTransactionsUseCase.transationsOf(account.getId());
+        List<AccountTransaction> transactions = getAccountTransactionsUseCase.getTransactionsOf(account.getId());
 
         // Assert
         assertEquals(expectedTransactionNumber, transactions.size());
